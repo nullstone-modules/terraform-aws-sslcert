@@ -1,3 +1,7 @@
+provider "aws" {
+  alias = domain
+}
+
 resource "aws_acm_certificate" "this" {
   domain_name               = var.domain.name
   validation_method         = "DNS"
@@ -20,6 +24,8 @@ resource "aws_route53_record" "cert_validation" {
   ttl             = 60
   allow_overwrite = true
   records         = [local.dvos[count.index].record]
+
+  provider = aws.domain
 
   count = length(var.alternative_names) + 1
 }

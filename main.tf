@@ -1,5 +1,5 @@
 provider "aws" {
-  alias = domain
+  alias = "domain"
 }
 
 resource "aws_acm_certificate" "this" {

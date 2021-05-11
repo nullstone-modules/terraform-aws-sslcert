@@ -7,6 +7,8 @@ resource "aws_acm_certificate" "this" {
   validation_method         = "DNS"
   subject_alternative_names = var.alternative_names
   tags                      = var.tags
+
+  count = var.enabled ? 1 : 0
 }
 
 locals {
@@ -27,15 +29,17 @@ resource "aws_route53_record" "cert_validation" {
 
   provider = aws.domain
 
-  count = length(var.alternative_names) + 1
+  count = var.enabled ? length(var.alternative_names) + 1 : 0
 }
 
 resource "aws_acm_certificate_validation" "this" {
-  certificate_arn         = aws_acm_certificate.this.arn
+  certificate_arn         = aws_acm_certificate.this[count.index].arn
   validation_record_fqdns = aws_route53_record.cert_validation.*.fqdn
 
   timeouts {
     create = "5m"
   }
+
+  count = var.enabled ? 1 : 0
 }
 

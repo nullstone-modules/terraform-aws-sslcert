@@ -1,3 +1,9 @@
+variable "enabled" {
+  description = "This enables/disables creating the SSL certificate. We cannot use module count because we have aliased providers."
+  type        = bool
+  default     = true
+}
+
 variable "domain" {
   description = "A domain name for which the certificate should be issued. Zone ID is used to create validation records"
   type = object({

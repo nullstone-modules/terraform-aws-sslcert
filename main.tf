@@ -12,7 +12,7 @@ resource "aws_acm_certificate" "this" {
 }
 
 locals {
-  dvos = [for dvo in aws_acm_certificate.this.domain_validation_options : {
+  dvos = [for dvo in try(aws_acm_certificate.this[0].domain_validation_options, []) : {
     name   = dvo.resource_record_name
     record = dvo.resource_record_value
     type   = dvo.resource_record_type

@@ -2,6 +2,14 @@ provider "aws" {
   alias = "domain"
 }
 
+terraform {
+  required_providers {
+    aws = {
+      configuration_aliases = [ aws.domain ]
+    }
+  }
+}
+
 resource "aws_acm_certificate" "this" {
   domain_name               = var.domain.name
   validation_method         = "DNS"

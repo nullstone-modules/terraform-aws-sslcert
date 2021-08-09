@@ -1,15 +1,3 @@
-provider "aws" {
-  alias = "domain"
-}
-
-terraform {
-  required_providers {
-    aws = {
-      configuration_aliases = [ aws.domain ]
-    }
-  }
-}
-
 resource "aws_acm_certificate" "this" {
   domain_name               = var.domain.name
   validation_method         = "DNS"
@@ -34,8 +22,6 @@ resource "aws_route53_record" "cert_validation" {
   ttl             = 60
   allow_overwrite = true
   records         = [local.dvos[count.index].record]
-
-  provider = aws.domain
 
   count = var.enabled ? length(var.alternative_names) + 1 : 0
 }

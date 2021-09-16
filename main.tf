@@ -24,6 +24,8 @@ resource "aws_route53_record" "cert_validation" {
   records         = [local.dvos[count.index].record]
 
   count = var.enabled ? length(var.alternative_names) + 1 : 0
+
+  provider = aws.domain
 }
 
 resource "aws_acm_certificate_validation" "this" {
